@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowForward
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -49,11 +49,11 @@ fun DateSwitchPanel(
             modifier = Modifier.weight(1f),
             onClick = {
                 currentDate = currentDate.minus(1L, ChronoUnit.MONTHS)
-                selectedDate.setSelection(currentDate.toMillis())
+                selectedDate.selectedDateMillis = currentDate.toMillis()
                 onDateChange(currentDate)
             }
         ) {
-            Icon(Icons.Rounded.ArrowBack, contentDescription = "Back")
+            Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back")
         }
         Text(
             text = stringify(selectedDate.selectedDateMillis ?: 0L),
@@ -67,11 +67,11 @@ fun DateSwitchPanel(
             modifier = Modifier.weight(1f),
             onClick = {
                 currentDate = currentDate.plus(1L, ChronoUnit.MONTHS)
-                selectedDate.setSelection(currentDate.toMillis())
+                selectedDate.selectedDateMillis = currentDate.toMillis()
                 onDateChange(currentDate)
             }
         ) {
-            Icon(Icons.Rounded.ArrowForward, contentDescription = "Forward")
+            Icon(Icons.AutoMirrored.Rounded.ArrowForward, contentDescription = "Forward")
         }
     }
 }

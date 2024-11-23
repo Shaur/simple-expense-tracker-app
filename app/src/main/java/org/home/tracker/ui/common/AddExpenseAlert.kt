@@ -5,11 +5,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowForward
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.sharp.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
@@ -52,14 +53,13 @@ fun AddExpenseDialog(
         initialSelectedDateMillis = expense?.date ?: System.currentTimeMillis()
     )
 
-    val currencies = listOf("KGS", "RUB", "USD")
+    val currencies = listOf("RUB", "KGS", "USD")
 
     var selectedCurrency by remember { mutableStateOf(expense?.currencyId ?: currencies[0]) }
 
     var selectedCategory by remember {
         if (categories.isEmpty()) mutableStateOf("")
-        else
-            mutableStateOf(expense?.category?.name ?: categories[0].name)
+        else mutableStateOf(expense?.category?.name ?: categories[0].name)
     }
 
     var value by remember {
@@ -73,14 +73,14 @@ fun AddExpenseDialog(
     if (showDatePicker) {
         DatePickerDialog(
             onDismissRequest = { showDatePicker = false },
-            confirmButton = { /*TODO*/ }) {
+            confirmButton = { /*TODO*/ }
+        ) {
             DatePicker(state = selectedDate)
         }
     }
 
     if (editCategory) {
-        AddNewDialog(
-            title = "Add new category",
+        AddNewDialog(title = "Add new category",
             exists = categories.map { it.name }.toSet(),
             onConfirm = {
                 selectedCategory = it
@@ -90,37 +90,34 @@ fun AddExpenseDialog(
     }
 
     Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .height(40.dp)
             .fillMaxWidth()
+            .padding(bottom = 5.dp)
     ) {
-        Button(
-            modifier = Modifier.weight(1f),
-            onClick = {
-                selectedDate.setSelection(
-                    (selectedDate.selectedDateMillis ?: 0L) - dayInMillis
-                )
-            }
-        ) {
-            Icon(Icons.Rounded.ArrowBack, contentDescription = "Back")
+        Button(modifier = Modifier.weight(1f), onClick = {
+            selectedDate.selectedDateMillis = (selectedDate.selectedDateMillis ?: 0L) - dayInMillis
+        }) {
+            Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back")
         }
         Text(
             text = stringify(selectedDate.selectedDateMillis ?: 0L),
             textAlign = TextAlign.Center,
             fontSize = 18.sp,
             modifier = Modifier
+                .align(Alignment.CenterVertically)
                 .weight(3f)
                 .clickable { showDatePicker = true }
         )
         Button(
             modifier = Modifier.weight(1f),
             onClick = {
-                selectedDate.setSelection(
+                selectedDate.selectedDateMillis =
                     (selectedDate.selectedDateMillis ?: 0L) + dayInMillis
-                )
             }
         ) {
-            Icon(Icons.Rounded.ArrowForward, contentDescription = "Forward")
+            Icon(Icons.AutoMirrored.Rounded.ArrowForward, contentDescription = "Forward")
         }
     }
     Row(
@@ -128,13 +125,11 @@ fun AddExpenseDialog(
             .height(55.dp)
             .fillMaxWidth()
     ) {
-        DropdownMenu(
-            values = categories,
+        DropdownMenu(values = categories,
             extract = { it.name },
             allowAdd = true,
             selectedValue = categories.find { it.name == selectedCategory },
-            onValueChange = { selectedCategory = it }
-        )
+            onValueChange = { selectedCategory = it })
     }
     Row(
         modifier = Modifier
@@ -172,8 +167,7 @@ fun AddExpenseDialog(
                     )
 
                     submit(expenseDto)
-                },
-                modifier = Modifier
+                }, modifier = Modifier
                     .width(150.dp)
                     .align(Alignment.CenterHorizontally)
             ) {
@@ -187,8 +181,7 @@ fun AddExpenseDialog(
 @Composable
 private fun AddExpenseDialogPreview() {
     val categories = listOf(
-        CategoryDto(1L, "Goods"),
-        CategoryDto(2L, "Travel")
+        CategoryDto(1L, "Goods"), CategoryDto(2L, "Travel")
     )
     MaterialTheme {
         Column {

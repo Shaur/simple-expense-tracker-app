@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -28,8 +30,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.helper.widget.Grid
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.home.tracker.AppViewModelProvider
 import org.home.tracker.dto.ExpenseDto
@@ -73,8 +78,8 @@ fun ExpenseScreen(
         },
     ) { paddings ->
 
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(300.dp),
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Adaptive(300.dp),
             modifier = Modifier
                 .padding(paddings)
                 .fillMaxHeight()
@@ -99,10 +104,12 @@ fun ExpenseScreen(
                 }
             }
 
-            item {
+            item(span = StaggeredGridItemSpan.FullLine) {
                 Text(
                     text = "Today",
                     fontWeight = FontWeight.Medium,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center,
                     color = Color.Gray,
                     modifier = Modifier.padding(top = 7.dp, start = 10.dp)
                 )
@@ -114,12 +121,14 @@ fun ExpenseScreen(
                 }
             }
 
-            item {
+            item(span = StaggeredGridItemSpan.FullLine) {
                 Text(
                     text = "Later",
                     fontWeight = FontWeight.Medium,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center,
                     color = Color.Gray,
-                    modifier = Modifier.padding(top = 7.dp, start = 10.dp)
+                    modifier = Modifier.padding(top = 15.dp, start = 10.dp)
                 )
             }
             items(items.filter { it.getLocalDate() != today }) {
@@ -133,6 +142,7 @@ fun ExpenseScreen(
 
     if (showAddMenu) {
         ModalBottomSheet(
+            modifier = Modifier.widthIn(max = 400.dp),
             onDismissRequest = {
                 selectedItem = null
                 showAddMenu = false
