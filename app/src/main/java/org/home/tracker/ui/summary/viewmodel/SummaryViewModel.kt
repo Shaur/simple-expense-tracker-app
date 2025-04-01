@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.home.tracker.dto.Aggregation
+import org.home.tracker.dto.ExpenseDto
 import org.home.tracker.dto.SummaryDto
 import org.home.tracker.persistence.repository.ExpenseRepository
 import org.home.tracker.ui.SummaryType
@@ -16,6 +17,7 @@ class SummaryViewModel(
 ) : ViewModel() {
 
     val items = mutableStateOf(listOf<SummaryDto>())
+    val subItems = mutableStateOf(mapOf<Long, List<ExpenseDto>>())
     val aggregations = mutableStateOf(mapOf<String, MutableList<Aggregation>>())
 
     companion object {
@@ -27,6 +29,21 @@ class SummaryViewModel(
         viewModelScope.launch {
             items.value = expenseRepository.summary(date.toMillis(), endPeriod.toMillis())
         }
+    }
+
+    fun initSubitems(date: LocalDate, type: SummaryType, categoryId: Long) {
+        val endPeriod = date.plus(1L, type.unit)
+        viewModelScope.launch {
+            val map = subItems.value.toMutableMap()
+            map[categoryId] = expenseRepository.findAll(date.toMillis(), endPeriod.toMillis(), categoryId)
+            subItems.value = map
+        }
+    }
+
+    fun clearSubItems(categoryId: Long) {
+        val map = subItems.value.toMutableMap()
+        map.remove(categoryId)
+        subItems.value = map
     }
 
     fun initAggregations(type: SummaryType) {

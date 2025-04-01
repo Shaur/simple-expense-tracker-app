@@ -21,6 +21,15 @@ class DefaultExpenseRepository(private val expenseDao: ExpenseDao) : ExpenseRepo
             .map { (expense, category) -> convert(expense, category) }
     }
 
+    override suspend fun findAll(
+        from: Long,
+        to: Long,
+        categoryId: Long
+    ): List<ExpenseDto> {
+        return expenseDao.findAll(from, to, categoryId)
+            .map { (expense, category) -> convert(expense, category) }
+    }
+
     override suspend fun summary(from: Long, to: Long): List<SummaryDto> {
         return expenseDao.summary(from, to)
     }

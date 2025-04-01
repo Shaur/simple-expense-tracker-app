@@ -29,7 +29,22 @@ interface ExpenseDao {
 
     @Query(
         """
-            select sum(ex.value) as value, ex.currency_id as currency, c.name as category from expense ex
+        select * from expense ex 
+            left join category c on ex.category_id = c.id 
+        where ex.date >= :from and ex.date <= :to and ex.category_id = :categoryId
+        order by date desc
+        """
+    )
+    suspend fun findAll(from: Long, to: Long, categoryId: Long): Map<Expense, Category>
+
+    @Query(
+        """
+            select 
+                sum(ex.value) as value, 
+                ex.currency_id as currency, 
+                c.name as category,
+                 ex.category_id as categoryId
+            from expense ex
                 left join category c on ex.category_id = c.id
             where ex.date >= :from and ex.date <= :to 
             group by ex.category_id, ex.currency_id
