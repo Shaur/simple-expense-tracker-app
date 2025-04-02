@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.home.tracker.dto.Aggregation
 import org.home.tracker.dto.ExpenseDto
-import org.home.tracker.dto.SummaryDto
+import org.home.tracker.dto.ExtendedSummaryDto
 import org.home.tracker.persistence.repository.ExpenseRepository
 import org.home.tracker.ui.SummaryType
 import org.home.tracker.util.toMillis
@@ -16,7 +16,7 @@ class SummaryViewModel(
     private val expenseRepository: ExpenseRepository
 ) : ViewModel() {
 
-    val items = mutableStateOf(listOf<SummaryDto>())
+    val items = mutableStateOf(listOf<ExtendedSummaryDto>())
     val subItems = mutableStateOf(mapOf<Long, List<ExpenseDto>>())
     val aggregations = mutableStateOf(mapOf<String, MutableList<Aggregation>>())
 
@@ -26,8 +26,19 @@ class SummaryViewModel(
 
     fun initItems(date: LocalDate, type: SummaryType) {
         val endPeriod = date.plus(1L, type.unit)
+        val startPreviousPeriod = date.minus(1L, type.unit)
         viewModelScope.launch {
+            val previousPeriod = expenseRepository.summary(
+                startPreviousPeriod.toMillis(),
+                date.toMillis() - 1
+            )
+                    .associate { dto -> dto.key() to dto.value }
+
             items.value = expenseRepository.summary(date.toMillis(), endPeriod.toMillis())
+                .map { summary ->
+                    ExtendedSummaryDto.from(summary)
+                        .copy(prevValue = previousPeriod[summary.key()] ?: 0L)
+                }
         }
     }
 
@@ -35,7 +46,8 @@ class SummaryViewModel(
         val endPeriod = date.plus(1L, type.unit)
         viewModelScope.launch {
             val map = subItems.value.toMutableMap()
-            map[categoryId] = expenseRepository.findAll(date.toMillis(), endPeriod.toMillis(), categoryId)
+            map[categoryId] =
+                expenseRepository.findAll(date.toMillis(), endPeriod.toMillis(), categoryId)
             subItems.value = map
         }
     }

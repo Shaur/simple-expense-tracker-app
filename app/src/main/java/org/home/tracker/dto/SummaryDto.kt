@@ -5,4 +5,8 @@ data class SummaryDto(
     val categoryId: Long,
     val value: Long,
     val currency: String
-)
+) {
+    fun key(): Pair<Long, String> {
+        return categoryId to currency
+    }
+}

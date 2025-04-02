@@ -14,12 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.home.tracker.AppViewModelProvider
-import org.home.tracker.dto.CategoryDto
-import org.home.tracker.dto.ExpenseDto
 import org.home.tracker.ui.SummaryType
 import org.home.tracker.ui.common.AggregationsChart
 import org.home.tracker.ui.common.DateSwitchPanel
 import org.home.tracker.ui.expense.component.ExpenseItem
+import org.home.tracker.ui.expense.component.SummaryItem
 import org.home.tracker.ui.summary.viewmodel.SummaryViewModel
 import org.home.tracker.util.Constants.DateTime.CURRENT_YEAR
 import java.time.LocalDate
@@ -50,13 +49,7 @@ fun SummaryScreen(
             AggregationsChart(aggregations = aggregations)
             DateSwitchPanel(date, onDateChange = { date = it })
             for (item in items) {
-                val dto = ExpenseDto(
-                    id = 0L,
-                    value = item.value,
-                    category = CategoryDto(null, item.category),
-                    currencyId = item.currency
-                )
-                ExpenseItem(dto) {
+                SummaryItem(item) {
                     if (subItems[item.categoryId].isNullOrEmpty()) {
                         viewModel.initSubitems(date, type, item.categoryId)
                     } else {
