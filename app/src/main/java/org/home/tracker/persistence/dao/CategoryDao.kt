@@ -9,7 +9,7 @@ import org.home.tracker.persistence.entity.Category
 @Dao
 interface CategoryDao {
 
-    @Query("select * from category")
+    @Query("select c.* from category c left join expense ex on ex.category_id = c.id group by c.id order by count(ex.id) desc")
     suspend fun findAll(): List<Category>
 
     @Insert

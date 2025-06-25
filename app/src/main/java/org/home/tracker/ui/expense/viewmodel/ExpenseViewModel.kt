@@ -52,6 +52,7 @@ class ExpenseViewModel(
 
             val endPeriodMillis = beginPeriod.value.plusMonths(1L).toMillis()
             state.value = expenseRepository.findAll(beginPeriod.value.toMillis(), endPeriodMillis)
+            categories.value = categoryRepository.findAll()
             updatePeriodSummary()
         }
     }

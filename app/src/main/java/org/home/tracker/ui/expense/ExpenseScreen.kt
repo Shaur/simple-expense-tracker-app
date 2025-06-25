@@ -34,7 +34,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.helper.widget.Grid
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.home.tracker.AppViewModelProvider
 import org.home.tracker.dto.ExpenseDto
