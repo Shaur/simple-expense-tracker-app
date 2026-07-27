@@ -1,5 +1,6 @@
 package org.home.tracker.ui.expense
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -92,7 +93,7 @@ fun ExpenseScreen(
                 )
             }
             item {
-                Row(modifier = Modifier.fillMaxWidth()) {
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                     PeriodSummary(title = "Yesterday", values = periodicSummary.yesterday)
                     PeriodSummary(title = "Today", values = periodicSummary.today)
                     PeriodSummary(

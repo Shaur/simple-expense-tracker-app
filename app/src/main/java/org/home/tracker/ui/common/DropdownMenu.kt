@@ -1,9 +1,10 @@
 package org.home.tracker.ui.common
 
-import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
@@ -68,7 +69,7 @@ fun <T : Any> DropdownMenu(
                 )
             },
             colors = ExposedDropdownMenuDefaults.textFieldColors(),
-            modifier = Modifier.menuAnchor()
+            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
         )
         ExposedDropdownMenu(
             expanded = expanded,
@@ -76,26 +77,26 @@ fun <T : Any> DropdownMenu(
         ) {
             values.forEach { selectionOption ->
                 DropdownMenuItem(
+                    text = { Text(text = extract(selectionOption)) },
                     onClick = {
                         selected = extract(selectionOption)
                         onValueChange(selected)
                         expanded = false
                     }
-                ) {
-                    Text(text = extract(selectionOption))
-                }
+                )
             }
 
             if (allowAdd) {
                 DropdownMenuItem(
+                    text = {
+                        Icon(Icons.Rounded.Add, contentDescription = "Add new category")
+                        Text(text = "Add new")
+                    },
                     onClick = {
                         showEditor = true
                         expanded = false
                     }
-                ) {
-                    Icon(Icons.Rounded.Add, contentDescription = "Add new category")
-                    Text(text = "Add new")
-                }
+                )
             }
         }
     }
