@@ -80,7 +80,8 @@ fun AddExpenseDialog(
     }
 
     if (editCategory) {
-        AddNewDialog(title = "Add new category",
+        AddNewDialog(
+            title = "Add new category",
             exists = categories.map { it.name }.toSet(),
             onConfirm = {
                 selectedCategory = it
@@ -125,11 +126,13 @@ fun AddExpenseDialog(
             .height(55.dp)
             .fillMaxWidth()
     ) {
-        DropdownMenu(values = categories,
+        DropdownMenu(
+            values = categories,
             extract = { it.name },
             allowAdd = true,
             selectedValue = categories.find { it.name == selectedCategory },
-            onValueChange = { selectedCategory = it })
+            onValueChange = { selectedCategory = it }
+        )
     }
     Row(
         modifier = Modifier

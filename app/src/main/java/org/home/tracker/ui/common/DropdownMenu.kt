@@ -1,5 +1,6 @@
 package org.home.tracker.ui.common
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -15,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -89,8 +91,10 @@ fun <T : Any> DropdownMenu(
             if (allowAdd) {
                 DropdownMenuItem(
                     text = {
-                        Icon(Icons.Rounded.Add, contentDescription = "Add new category")
-                        Text(text = "Add new")
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Rounded.Add, contentDescription = "Add new category")
+                            Text(text = "Add new")
+                        }
                     },
                     onClick = {
                         showEditor = true

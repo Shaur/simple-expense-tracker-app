@@ -6,7 +6,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.patrykandpatrick.vico.core.extension.getFieldValue
 import org.home.tracker.ui.SummaryType
 import org.home.tracker.ui.expense.ExpenseScreen
 import org.home.tracker.ui.summary.SummaryScreen

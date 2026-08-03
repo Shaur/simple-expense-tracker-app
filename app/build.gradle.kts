@@ -1,7 +1,5 @@
 plugins {
     id("com.android.application")
-//    id("org.jetbrains.kotlin.android")
-//    id("kotlin-kapt")
     id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.plugin.compose")
 }
@@ -46,11 +44,12 @@ android {
 
 dependencies {
     val roomVersion = "2.8.4"
+    val chartsVersion = "3.2.3"
 
     implementation("androidx.core:core-ktx:1.19.0")
     implementation("androidx.appcompat:appcompat:1.7.1")
     implementation("com.google.android.material:material:1.14.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.2")
     implementation("androidx.navigation:navigation-fragment-ktx:2.9.8")
     implementation("androidx.navigation:navigation-ui-ktx:2.9.8")
 
@@ -59,8 +58,8 @@ dependencies {
     ksp("androidx.room:room-compiler:$roomVersion")
 
     //Charts
-    implementation("com.patrykandpatrick.vico:compose:1.13.1")
-    implementation("com.patrykandpatrick.vico:compose-m3:1.13.1")
+    implementation("com.patrykandpatrick.vico:compose:$chartsVersion")
+    implementation("com.patrykandpatrick.vico:compose-m3:$chartsVersion")
 
     implementation("androidx.navigation:navigation-compose:2.9.8")
     implementation("androidx.compose.material3:material3:1.4.0")
