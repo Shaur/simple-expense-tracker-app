@@ -35,9 +35,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.home.tracker.AppViewModelProvider
 import org.home.tracker.dto.ExpenseDto
+import org.home.tracker.persistence.repository.SharedDataRepository
 import org.home.tracker.ui.SummaryType
 import org.home.tracker.ui.common.AddExpenseDialog
 import org.home.tracker.ui.common.ExpenseSummary
@@ -65,6 +67,9 @@ fun ExpenseScreen(
     val items by remember { viewModel.state }
     val categories by remember { viewModel.categories }
     var selectedItem by remember { mutableStateOf<ExpenseDto?>(null) }
+
+    val additionalState = SharedDataRepository.updateTimeFlow.asLiveData()
+    additionalState.observeForever { viewModel.initState() }
 
     Scaffold(
         floatingActionButton = {

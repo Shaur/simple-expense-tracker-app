@@ -36,6 +36,12 @@ class ExpenseViewModel(
         }
     }
 
+    fun initState() {
+        viewModelScope.launch {
+            val endPeriodMillis = beginPeriod.value.plusMonths(1L).toMillis()
+            state.value = expenseRepository.findAll(beginPeriod.value.toMillis(), endPeriodMillis)
+        }
+    }
 
     fun save(expense: ExpenseDto) {
         viewModelScope.launch {
