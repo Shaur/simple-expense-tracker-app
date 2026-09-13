@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.plugin.compose")
+    id("androidx.room3")
 }
 
 android {
@@ -41,10 +42,14 @@ android {
     }
 }
 
+room3 {
+    schemaDirectory("$projectDir/schemas")
+}
+
 dependencies {
-    val roomVersion = "2.8.4"
-    val chartsVersion = "3.3.0"
-    val navigationVersion = "2.10.0"
+    val roomVersion = "3.0.3"
+    val chartsVersion = "3.3.1"
+    val navigationVersion = "2.10.1"
 
     implementation("androidx.core:core-ktx:1.19.0")
     implementation("androidx.appcompat:appcompat:1.8.0")
@@ -54,19 +59,18 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
     implementation("androidx.navigation:navigation-compose:$navigationVersion")
 
-    implementation("androidx.room:room-runtime:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion")
-    ksp("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room3:room3-runtime:${roomVersion}")
+    ksp("androidx.room3:room3-compiler:$roomVersion")
 
     //Charts
     implementation("com.patrykandpatrick.vico:compose:$chartsVersion")
     implementation("com.patrykandpatrick.vico:compose-m3:$chartsVersion")
 
     implementation("androidx.compose.material3:material3:1.4.0")
-    implementation("androidx.compose.material:material:1.12.0")
+    implementation("androidx.compose.material:material:1.12.1")
     implementation("androidx.compose.material:material-icons-extended:1.7.8")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.12.0")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.12.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.12.1")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.12.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.3.0")

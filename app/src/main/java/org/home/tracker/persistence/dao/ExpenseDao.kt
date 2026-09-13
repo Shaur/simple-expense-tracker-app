@@ -1,10 +1,10 @@
 package org.home.tracker.persistence.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.MapColumn
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room3.Dao
+import androidx.room3.Insert
+import androidx.room3.MapColumn
+import androidx.room3.Query
+import androidx.room3.Update
 import org.home.tracker.dto.MonthlyExpenseDto
 import org.home.tracker.dto.SummaryDto
 import org.home.tracker.dto.WeeklyExpenseDto

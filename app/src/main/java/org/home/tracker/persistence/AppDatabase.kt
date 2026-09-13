@@ -1,9 +1,9 @@
 package org.home.tracker.persistence
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room3.Database
+import androidx.room3.Room
+import androidx.room3.RoomDatabase
 import org.home.tracker.persistence.dao.CategoryDao
 import org.home.tracker.persistence.dao.ExpenseDao
 import org.home.tracker.persistence.dao.ExpenseRuleDao
@@ -37,7 +37,9 @@ abstract class AppDatabase : RoomDatabase() {
             context,
             AppDatabase::class.java,
             "expense-tracker-database"
-        ).build()
+        )
+            .fallbackToDestructiveMigration(false)
+            .build()
     }
 
 }
