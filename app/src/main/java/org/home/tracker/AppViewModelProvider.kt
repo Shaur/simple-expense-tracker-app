@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import org.home.tracker.ui.expense.rule.viewmodel.ExpenseRuleViewModel
 import org.home.tracker.ui.expense.viewmodel.ExpenseViewModel
 import org.home.tracker.ui.summary.viewmodel.SummaryViewModel
 
@@ -19,6 +20,13 @@ object AppViewModelProvider {
         initializer {
             SummaryViewModel(
                 expenseRepository = expenseTrackerApplication().container.expenseRepository
+            )
+        }
+
+        initializer {
+            ExpenseRuleViewModel(
+                expenseRuleRepository = expenseTrackerApplication().container.expenseRuleRepository,
+                categoryRepository = expenseTrackerApplication().container.categoryRepository
             )
         }
     }

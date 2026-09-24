@@ -10,6 +10,8 @@ sealed class NavigationRoutes {
 
         data object Summary : Graph(route = "summary")
 
+        data object Settings : Graph(route = "settings")
+
     }
 
 }

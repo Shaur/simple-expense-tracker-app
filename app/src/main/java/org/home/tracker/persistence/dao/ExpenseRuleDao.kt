@@ -24,5 +24,5 @@ interface ExpenseRuleDao {
     suspend fun delete(rule: ExpenseRule)
 
     @Query("select * from expense_rule where id = :id")
-    fun getById(id: Long): ExpenseRule
+    suspend fun getById(id: Long): ExpenseRule
 }

@@ -10,12 +10,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
@@ -46,6 +47,7 @@ fun ExpenseSummary(
     from: LocalDate,
     summary: Map<String, Long>,
     onClick: (SummaryType) -> Unit,
+    openSettings: () -> Unit,
     onDateChange: (Long) -> Unit
 ) {
     val toString = from.plusMonths(1L).format(DateTimeFormatter.ISO_LOCAL_DATE)
@@ -63,13 +65,13 @@ fun ExpenseSummary(
                         showDatePicker = false
                     }
                 ) {
-                    androidx.compose.material3.Text(text = "Confirm")
+                    Text(text = "Confirm")
                 }
             },
             dismissButton = {
-                TextButton(onClick = {
-                    showDatePicker = false
-                }) { androidx.compose.material3.Text("Dismiss") }
+                TextButton(
+                    onClick = { showDatePicker = false }
+                ) { Text("Dismiss") }
             }
         ) {
             DatePicker(state = selectedDate)
@@ -81,7 +83,7 @@ fun ExpenseSummary(
             defaultElevation = 6.dp
         ),
         colors = CardDefaults.cardColors(
-            containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surface,
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
         modifier = Modifier
             .height(100.dp)
@@ -110,6 +112,15 @@ fun ExpenseSummary(
                 ) {
                     Icon(Icons.Rounded.Info, contentDescription = null)
                 }
+                IconButton(
+                    onClick = openSettings,
+                    modifier = Modifier
+                        .height(25.dp)
+                        .width(25.dp)
+                        .weight(1f)
+                ) {
+                    Icon(Icons.Rounded.Settings, contentDescription = null)
+                }
 
             }
             LazyVerticalGrid(
@@ -130,6 +141,12 @@ fun ExpenseSummary(
 fun BottomBarPreview() {
     val state = mapOf("KGS" to 1000L)
     MaterialTheme {
-        ExpenseSummary(LocalDate.of(2023, 1, 1), state, onDateChange = {}, onClick = { })
+        ExpenseSummary(
+            LocalDate.of(2023, 1, 1),
+            state,
+            openSettings = {},
+            onDateChange = {},
+            onClick = { }
+        )
     }
 }

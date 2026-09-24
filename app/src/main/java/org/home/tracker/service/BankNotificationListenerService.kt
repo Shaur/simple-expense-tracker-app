@@ -10,8 +10,10 @@ import kotlinx.coroutines.launch
 import org.home.tracker.ExpenseTrackerApplication
 import org.home.tracker.dto.CategoryDto
 import org.home.tracker.dto.ExpenseDto
+import org.home.tracker.dto.ExpenseRuleDto
 import org.home.tracker.persistence.repository.CategoryRepository
 import org.home.tracker.persistence.repository.ExpenseRepository
+import org.home.tracker.persistence.repository.ExpenseRuleRepository
 import org.home.tracker.persistence.repository.SharedDataRepository
 
 class BankNotificationListenerService : NotificationListenerService() {
@@ -22,6 +24,8 @@ class BankNotificationListenerService : NotificationListenerService() {
 
     private lateinit var categoryRepository: CategoryRepository
 
+    private lateinit var expenseRuleRepository: ExpenseRuleRepository
+
     private lateinit var handlers: Map<String, NotificationHandler>
 
     override fun onCreate() {
@@ -29,11 +33,13 @@ class BankNotificationListenerService : NotificationListenerService() {
 
         expenseRepository = (application as ExpenseTrackerApplication).container.expenseRepository
         categoryRepository = (application as ExpenseTrackerApplication).container.categoryRepository
+        expenseRuleRepository = (application as ExpenseTrackerApplication).container.expenseRuleRepository
 
         handlers = mapOf(
             "ru.vtb24.mobilebanking.android" to VtbNotificationHandler(
                 categoryRepository,
-                expenseRepository
+                expenseRepository,
+                expenseRuleRepository
             )
         )
     }
@@ -85,7 +91,8 @@ class BankNotificationListenerService : NotificationListenerService() {
 
     class VtbNotificationHandler(
         private val categoryRepository: CategoryRepository,
-        private val expenseRepository: ExpenseRepository
+        private val expenseRepository: ExpenseRepository,
+        private val expenseRuleRepository: ExpenseRuleRepository
     ) : AbstractNotificationHandler() {
 
         override fun check(text: String): Boolean {
@@ -100,6 +107,12 @@ class BankNotificationListenerService : NotificationListenerService() {
                 var category = categoryRepository.findAll().find { it.name == "Прочее" }
                 if (category == null) {
                     category = categoryRepository.save(CategoryDto(id = null, "Прочее"))
+                }
+
+                val rules = expenseRuleRepository.findAll().associateBy(ExpenseRuleDto::pattern)
+                val key = rules.keys.find { text.contains(it) }
+                if (key != null) {
+                    category = rules.getValue(key).category
                 }
 
                 expenseRepository.save(createExpense(cost, category))

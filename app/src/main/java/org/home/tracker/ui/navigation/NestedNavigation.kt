@@ -8,6 +8,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import org.home.tracker.ui.SummaryType
 import org.home.tracker.ui.expense.ExpenseScreen
+import org.home.tracker.ui.expense.rule.ExpenseRulesScreen
 import org.home.tracker.ui.summary.SummaryScreen
 
 fun NavGraphBuilder.graph(controller: NavController) {
@@ -16,19 +17,28 @@ fun NavGraphBuilder.graph(controller: NavController) {
         startDestination = NavigationRoutes.Graph.Expense.route
     ) {
         composable(route = NavigationRoutes.Graph.Expense.route) {
-            ExpenseScreen {
-                controller.navigate(route = NavigationRoutes.Graph.Summary.route + "/$it")
-            }
+            ExpenseScreen(
+                navigateToSummaryScreen = { controller.navigate(route = NavigationRoutes.Graph.Summary.route + "/$it") },
+                navigateToSettingScreen = { controller.navigate(route = NavigationRoutes.Graph.Settings.route) }
+            )
         }
 
         composable(
             route = NavigationRoutes.Graph.Summary.route + "/{type}",
             arguments = listOf(
-                navArgument("type") { type = NavType.EnumType(SummaryType::class.java); nullable = false}
+                navArgument("type") {
+                    type = NavType.EnumType(SummaryType::class.java); nullable = false
+                }
             )
         ) {
             val type: SummaryType = it.arguments?.getSerializable("type", SummaryType::class.java)!!
             SummaryScreen(type = type)
+        }
+
+        composable(
+            route = NavigationRoutes.Graph.Settings.route
+        ) {
+            ExpenseRulesScreen()
         }
     }
 }

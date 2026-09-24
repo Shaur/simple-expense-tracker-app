@@ -55,7 +55,8 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun ExpenseScreen(
     viewModel: ExpenseViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    navigateToSummaryScreen: (type: SummaryType) -> Unit
+    navigateToSummaryScreen: (type: SummaryType) -> Unit,
+    navigateToSettingScreen: () -> Unit
 ) {
     val today = LocalDate.now()
 
@@ -94,6 +95,7 @@ fun ExpenseScreen(
                     beginPeriodState,
                     periodicSummary.month,
                     navigateToSummaryScreen,
+                    openSettings = navigateToSettingScreen,
                     onDateChange = { viewModel.updateBeginPeriod(it) }
                 )
             }
@@ -174,6 +176,9 @@ fun stringify(millis: Long): String {
 @Composable
 fun ExpenseScreenPreview() {
     MaterialTheme {
-        ExpenseScreen {}
+        ExpenseScreen(
+            navigateToSummaryScreen = {},
+            navigateToSettingScreen = {}
+        )
     }
 }
