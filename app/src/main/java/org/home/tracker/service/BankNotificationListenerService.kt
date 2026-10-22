@@ -53,12 +53,13 @@ class BankNotificationListenerService : NotificationListenerService() {
 
         val extras = sbn?.notification?.extras
 
+        val title = extras?.getCharSequence("android.title").toString()
         val text = extras?.getCharSequence("android.text").toString()
 
         val handler = handlers[packageName] ?: return
 
         if (handler.check(text)) {
-            handler.handle(text)
+            handler.handle(title, text)
         }
     }
 
@@ -66,7 +67,7 @@ class BankNotificationListenerService : NotificationListenerService() {
 
         fun check(text: String): Boolean
 
-        fun handle(text: String)
+        fun handle(title: String, text: String)
     }
 
     abstract class AbstractNotificationHandler : NotificationHandler {
@@ -95,13 +96,15 @@ class BankNotificationListenerService : NotificationListenerService() {
         private val expenseRuleRepository: ExpenseRuleRepository
     ) : AbstractNotificationHandler() {
 
+        private val checkString = "Покупка"
+
         override fun check(text: String): Boolean {
-            return text.startsWith("Оплата")
+            return text.startsWith(checkString)
         }
 
-        override fun handle(text: String) {
-            val endIndex = text.indexOf("р")
-            val cost = parseDouble(text.substring(7, endIndex))
+        override fun handle(title: String, text: String) {
+            val endIndex = text.indexOf("₽")
+            val cost = parseDouble(text.substring(checkString.length, endIndex).trim())
 
             MainScope().launch {
                 var category = categoryRepository.findAll().find { it.name == "Прочее" }
@@ -110,7 +113,7 @@ class BankNotificationListenerService : NotificationListenerService() {
                 }
 
                 val rules = expenseRuleRepository.findAll().associateBy(ExpenseRuleDto::pattern)
-                val key = rules.keys.find { text.contains(it) }
+                val key = rules.keys.find { title.contains(it) }
                 if (key != null) {
                     category = rules.getValue(key).category
                 }
