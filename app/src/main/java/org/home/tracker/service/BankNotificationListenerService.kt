@@ -97,6 +97,7 @@ class BankNotificationListenerService : NotificationListenerService() {
     ) : AbstractNotificationHandler() {
 
         private val checkString = "Покупка"
+        private val whitespaceRegex = "\\p{Zs}+".toRegex()
 
         override fun check(text: String): Boolean {
             return text.startsWith(checkString)
@@ -104,7 +105,7 @@ class BankNotificationListenerService : NotificationListenerService() {
 
         override fun handle(title: String, text: String) {
             val endIndex = text.indexOf("₽")
-            val cost = parseDouble(text.substring(checkString.length, endIndex).trim())
+            val cost = parseDouble(text.substring(checkString.length, endIndex).replace(whitespaceRegex, ""))
 
             MainScope().launch {
                 var category = categoryRepository.findAll().find { it.name == "Прочее" }
