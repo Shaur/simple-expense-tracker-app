@@ -96,15 +96,17 @@ class BankNotificationListenerService : NotificationListenerService() {
         private val expenseRuleRepository: ExpenseRuleRepository
     ) : AbstractNotificationHandler() {
 
-        private val checkString = "Покупка"
+        private val checkStrings = listOf("Покупка", "Оплата СБП", "Оплата")
+
         private val whitespaceRegex = "\\p{Zs}+".toRegex()
 
         override fun check(text: String): Boolean {
-            return text.startsWith(checkString)
+            return checkStrings.any(text::startsWith)
         }
 
         override fun handle(title: String, text: String) {
             val endIndex = text.indexOf("₽")
+            val checkString = checkStrings.first(text::startsWith)
             val cost = parseDouble(text.substring(checkString.length, endIndex).replace(whitespaceRegex, ""))
 
             MainScope().launch {
